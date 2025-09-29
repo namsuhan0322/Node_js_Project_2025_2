@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const router = express.Router();
+const resourceFilePath = 'resources.json'; // 리소스 저장 파일 경로
 
 // 초기 자원 설정
 const initalResources = {
@@ -37,13 +38,15 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {
     const { name, password } = req.body;
 
-    if (!global.player[name]) {
+    if (!global.players[name]) {
         return res.status(400).send({ message: '플레이어를 찾을 수 없습니다.' });
     }
 
-    if (password !== global.player[name].password) {
+    if (password !== global.players[name].password) {
         return res.status(401).send({ message: '비밀번호가 틀렸습니다.' });
     }
+
+    const player = global.players[name];
 
     // 응답 데이터
     const reqponsePayLoad = {
@@ -56,5 +59,9 @@ router.post('/login', (req, res) => {
     console.log('Login response playLoad: ', reqponsePayLoad);
     res.send(reqponsePayLoad);
 });
+
+function saveResources() {
+    fs.writeFileSync(resourceFilePath, JSON.stringify(global.players, null, 2)); // JSON 파일로 저장
+}
 
 module.exports = router; // 라우터 등록
