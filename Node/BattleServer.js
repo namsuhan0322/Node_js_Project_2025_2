@@ -418,7 +418,7 @@ class BattleServer {
         return 'player_' + Math.random().toString(36).substring(2, 9);
     }
     // ID 생성
-    generatePlayerId() {
+    generateBattleId() {
         return 'battle_' + Math.random().toString(36).substring(2, 9);
     }
 }
